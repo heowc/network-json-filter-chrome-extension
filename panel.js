@@ -59,6 +59,9 @@ function print(value) {
   
   logArea.appendChild(pNode);
   logArea.appendChild(hrNode);
+  
+  // focus
+  hrNode.scrollIntoView();
 }
 
 document.querySelector('#clear').addEventListener('click', function(e) {
