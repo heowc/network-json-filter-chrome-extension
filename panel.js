@@ -1,8 +1,7 @@
 var logArea = document.querySelector('#log-area');
 
 chrome.devtools.network.onRequestFinished.addListener(request => {
-  var contentType = request.response.headers.filter(it => it.name === 'content-type')[0];
-  if (contentType['value'].indexOf('application/json') === -1) {
+  if (!isJsonType(request)) {
     return;
   }
 
@@ -17,11 +16,9 @@ chrome.devtools.network.onRequestFinished.addListener(request => {
   var expression = document.querySelector('#expression');
 
   request.getContent(function (content) {
-    
     var expressionValue = expression.value;
     if (!expressionValue) {
       print(content);
-      document.querySelector('#log-area').append(content);
     } else {
       var actual = jsonpath.query(JSON.parse(content), expressionValue)
       print(JSON.stringify(actual));
@@ -29,14 +26,18 @@ chrome.devtools.network.onRequestFinished.addListener(request => {
   });
 });
 
+function isJsonType(request) {
+  return request.response.content.mimeType === 'application/json';
+}
+
 function print(value) {
   var spanNode = document.createElement("span");
   spanNode.textContent = '▼';
+  //spanNode.style = 'width:15px;height:15px;display:block;'
   spanNode.dataset.display = 'true';
   spanNode.addEventListener('click', function(e) {
-    console.log(this.dataset);
     if (this.dataset.display === 'true') {
-      this.textContent = '►';
+      this.textContent = '▶';
       this.dataset.display = 'false';
       this.nextElementSibling.style = 'display:none';
     } else {
