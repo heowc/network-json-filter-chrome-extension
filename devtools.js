@@ -1,0 +1,1 @@
+chrome.devtools.panels.create("JSON Filter", null, 'panel.html');

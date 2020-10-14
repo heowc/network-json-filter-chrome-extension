@@ -1,0 +1,12 @@
+{
+  "name": "network-json-filter",
+  "version": "1.0",
+  "description": "Network Response (JSON Body) Filter as Google Chrome Extension",
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "*://*/*"
+  ],
+  "devtools_page": "devtools.html",
+  "manifest_version": 2
+}
