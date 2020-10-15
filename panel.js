@@ -32,6 +32,7 @@ function isJsonType(request) {
 
 function print(value) {
   var spanNode = document.createElement("span");
+  spanNode.className = 'arrow'
   spanNode.textContent = '▼';
   //spanNode.style = 'width:15px;height:15px;display:block;'
   spanNode.dataset.display = 'true';
