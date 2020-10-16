@@ -1,11 +1,14 @@
+var DEFAULT_JSON = "{}";
+
 var logArea = document.querySelector('#log-area');
+var url = document.querySelector('#url');
+var expression = document.querySelector('#expression');
 
 chrome.devtools.network.onRequestFinished.addListener(request => {
   if (!isJsonType(request)) {
     return;
   }
 
-  var url = document.querySelector('#url');
   var urlValue = url.value;
   if (urlValue) {
     if (!request.request.url.includes(urlValue)) {
@@ -13,15 +16,18 @@ chrome.devtools.network.onRequestFinished.addListener(request => {
     }
   }
 
-  var expression = document.querySelector('#expression');
-
   request.getContent(function (content) {
     var expressionValue = expression.value;
     if (!expressionValue) {
-      print(content);
+      appendToPanel(content);
+      return;
+    }
+
+    var result = jsonpath.query(JSON.parse(content), expressionValue)
+    if (result.length > 0) {
+      appendToPanel(JSON.stringify(result[0]));
     } else {
-      var actual = jsonpath.query(JSON.parse(content), expressionValue)
-      print(JSON.stringify(actual));
+      appendToPanel(DEFAULT_JSON);
     }
   });
 });
@@ -30,7 +36,26 @@ function isJsonType(request) {
   return request.response.content.mimeType === 'application/json';
 }
 
-function print(value) {
+function appendToPanel(value) {
+  // span
+  var spanNode = generateSpan();
+  // pre(json content)
+  var preNode = generatePre(JSON.stringify(JSON.parse(value), undefined, 2));
+  // p
+  var pNode = document.createElement("p");
+  pNode.appendChild(spanNode);
+  pNode.appendChild(preNode);
+  // hr
+  var hrNode = document.createElement("hr");
+  
+  logArea.appendChild(pNode);
+  logArea.appendChild(hrNode);
+  
+  // focus
+  hrNode.scrollIntoView();
+}
+
+function generateSpan() {
   var spanNode = document.createElement("span");
   spanNode.className = 'arrow'
   spanNode.textContent = '▼';
@@ -47,24 +72,17 @@ function print(value) {
       this.nextElementSibling.style = '';
     }
   });
-  
-  // json content
-  var preNode = document.createElement("pre");
-  preNode.textContent = JSON.stringify(JSON.parse(value), undefined, 2);
-  // p
-  var pNode = document.createElement("p");
-  pNode.appendChild(spanNode);
-  pNode.appendChild(preNode);
-  // hr
-  var hrNode = document.createElement("hr");
-  
-  logArea.appendChild(pNode);
-  logArea.appendChild(hrNode);
-  
-  // focus
-  hrNode.scrollIntoView();
+
+  return spanNode;
 }
 
+function generatePre(content) {
+  var preNode = document.createElement("pre");
+  preNode.textContent = content;
+  return preNode;
+}
+
+/* =========================== event =========================== */
 document.querySelector('#clear').addEventListener('click', function(e) {
   logArea.innerHTML = '';
 });
