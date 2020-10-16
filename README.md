@@ -3,4 +3,4 @@ Network Response (JSON Body) Filter as Google Chrome Extension
 
 # Screenshot
 
-![img screenshot](./img/screenshot.png)
+![img screenshot](./docs/screenshot.png)

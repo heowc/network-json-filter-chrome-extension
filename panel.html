@@ -1,18 +1,55 @@
 <html>
     <head>
         <style>
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .form-area {
+                padding: 1px;
+                background-color: #F5F6F7;
+                border-bottom: 1px solid rgb(192, 192, 192);
+            }
+            .input-text {
+                border: 0;
+                height: 22px;
+                margin: 2px;
+            }
             .arrow {
                 cursor: pointer;
+            }
+            .div {
+                vertical-align: middle;
+                display: inline-block;
+                width: 1px;
+                height: 18px;                
+                background-color: rgb(220, 220, 220)
+            }
+            .clear {
+                width: 18px;
+                height: 18px;
+                cursor: pointer;
+                vertical-align: middle;
+                opacity: 0.6;
+            }
+            .clear:hover {
+                opacity: 0.8;
+            }
+            
+            .log-area {
+                margin: 3px;
             }
         </style>
     </head>
     <body>
-        <div id="form-area">
-            url: <input id="url" placeholder="url"/><br>
-            expression: <input id="expression" style="width:50%" placeholder="expression"/><br>
-            <button id="clear">clear</button><br>
+        <div id="form-area" class="form-area">
+            <!-- <label>url:</label> --><input id="url" class="input-text" placeholder=" url"/>
+            <span class="div"></span>
+            <!-- <label>expression:</label> --><input id="expression" class="input-text" style="width:50%" placeholder=" expression"/>
+            <span class="div"></span>
+            <img src="/img/delete.svg" id="clear" class="clear"/>
         </div>
-        <div id="log-area"></div>
+        <div id="log-area" class="log-area"></div>
     </body>
     <!-- https://unpkg.com/jsonpath@1.0.2/jsonpath.min.js -->
     <script type="module" src="jsonpath.min.js"></script>
