@@ -52,7 +52,9 @@ function appendToPanel(value) {
   logArea.appendChild(hrNode);
   
   // focus
-  hrNode.scrollIntoView();
+  if (document.querySelector('#checkbox-follow-tail').checked) {
+    hrNode.scrollIntoView();
+  }
 }
 
 function generateSpan() {
