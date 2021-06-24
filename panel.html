@@ -4,8 +4,13 @@
             body {
                 margin: 0;
                 padding: 0;
+                padding-top: 30px;
             }
             .form-area {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
                 padding: 1px;
                 background-color: #F5F6F7;
                 border-bottom: 1px solid rgb(192, 192, 192);
@@ -35,7 +40,10 @@
             .clear:hover {
                 opacity: 0.8;
             }
-            
+            .checkbok {
+                vertical-align: middle;
+                margin-right: -1px;
+            }
             .log-area {
                 margin: 3px;
             }
@@ -43,11 +51,16 @@
     </head>
     <body>
         <div id="form-area" class="form-area">
-            <!-- <label>url:</label> --><input id="url" class="input-text" placeholder=" url"/>
+            <input id="url" class="input-text" placeholder=" url"/>
             <span class="div"></span>
-            <!-- <label>expression:</label> --><input id="expression" class="input-text" style="width:50%" placeholder=" expression"/>
+            <input id="expression" class="input-text" style="width:50%" placeholder=" expression"/>
             <span class="div"></span>
             <img src="resources/img/delete.svg" id="clear" class="clear"/>
+            <span class="div"></span>
+            <span>
+                <input type="checkbox" id="checkbox-follow-tail" class="checkbok" checked/>
+                <label>Follow tail</label>
+            </span>
         </div>
         <div id="log-area" class="log-area"></div>
     </body>

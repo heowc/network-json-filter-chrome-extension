@@ -3,6 +3,7 @@ var DEFAULT_JSON = "{}";
 var logArea = document.querySelector('#log-area');
 var url = document.querySelector('#url');
 var expression = document.querySelector('#expression');
+var followTail = document.querySelector('#checkbox-follow-tail')
 
 chrome.devtools.network.onRequestFinished.addListener(request => {
   if (!isJsonType(request)) {
@@ -52,7 +53,9 @@ function appendToPanel(value) {
   logArea.appendChild(hrNode);
   
   // focus
-  hrNode.scrollIntoView();
+  if (followTail.checked) {
+    hrNode.scrollIntoView();
+  }
 }
 
 function generateSpan() {
