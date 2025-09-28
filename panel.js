@@ -7,7 +7,8 @@ var autoScroll = document.querySelector("#checkbox-autoscroll");
 var autoClear = document.querySelector("#checkbox-autoclear");
 var onOff = document.querySelector("#checkbox-onoff");
 var pretty = document.querySelector("#checkbox-pretty");
-var toggleAllBtn = document.querySelector("#toggle-all");
+var toggleOpen = document.querySelector("#toggle-open");
+var toggleClose = document.querySelector("#toggle-close");
 
 chrome.devtools.network.onRequestFinished.addListener((request) => {
   if (!isJsonType(request)) {
@@ -97,24 +98,25 @@ function generatePre(content) {
   return preNode;
 }
 
-// Global open/close all
-var allOpen = true;
-toggleAllBtn.addEventListener("click", function () {
+// Expand all button
+toggleOpen.addEventListener("click", function () {
   var arrows = logArea.querySelectorAll(".arrow");
   arrows.forEach(function (arrow) {
-    if (allOpen) {
-      arrow.textContent = "▶";
-      arrow.dataset.display = "false";
-      if (arrow.nextElementSibling)
-        arrow.nextElementSibling.style = "display:none";
-    } else {
-      arrow.textContent = "▼";
-      arrow.dataset.display = "true";
-      if (arrow.nextElementSibling) arrow.nextElementSibling.style = "";
-    }
+    arrow.textContent = "▼";
+    arrow.dataset.display = "true";
+    if (arrow.nextElementSibling) arrow.nextElementSibling.style = "";
   });
-  allOpen = !allOpen;
-  toggleAllBtn.textContent = allOpen ? "open(▼)/close(▶)" : "open(▼)/close(▶)";
+});
+
+// Collapse all button
+toggleClose.addEventListener("click", function () {
+  var arrows = logArea.querySelectorAll(".arrow");
+  arrows.forEach(function (arrow) {
+    arrow.textContent = "▶";
+    arrow.dataset.display = "false";
+    if (arrow.nextElementSibling)
+      arrow.nextElementSibling.style = "display:none";
+  });
 });
 
 // Clear button event
