@@ -3,19 +3,10 @@ var DEFAULT_JSON = "{}";
 var logArea = document.querySelector("#log-area");
 var url = document.querySelector("#url");
 var expression = document.querySelector("#expression");
-var autoScroll = document.querySelector("#checkbox-autoscroll");
-var autoClear = document.querySelector("#checkbox-autoclear");
-var onOff = document.querySelector("#checkbox-onoff");
-var pretty = document.querySelector("#checkbox-pretty");
-var toggleOpen = document.querySelector("#toggle-open");
-var toggleClose = document.querySelector("#toggle-close");
+var followTail = document.querySelector("#checkbox-follow-tail");
 
 chrome.devtools.network.onRequestFinished.addListener((request) => {
   if (!isJsonType(request)) {
-    return;
-  }
-
-  if (!onOff.checked) {
     return;
   }
 
@@ -28,9 +19,6 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
 
   request.getContent(function (content) {
     var expressionValue = expression.value;
-    if (autoClear.checked) {
-      logArea.innerHTML = "";
-    }
     if (!expressionValue) {
       appendToPanel(content);
       return;
@@ -50,25 +38,22 @@ function isJsonType(request) {
 }
 
 function appendToPanel(value) {
+  // span
   var spanNode = generateSpan();
-  var jsonStr;
-  try {
-    if (pretty.checked) {
-      jsonStr = JSON.stringify(JSON.parse(value), undefined, 2);
-    } else {
-      jsonStr = JSON.stringify(JSON.parse(value));
-    }
-  } catch (e) {
-    jsonStr = value;
-  }
-  var preNode = generatePre(jsonStr);
+  // pre(json content)
+  var preNode = generatePre(JSON.stringify(JSON.parse(value), undefined, 2));
+  // p
   var pNode = document.createElement("p");
   pNode.appendChild(spanNode);
   pNode.appendChild(preNode);
+  // hr
   var hrNode = document.createElement("hr");
+
   logArea.appendChild(pNode);
   logArea.appendChild(hrNode);
-  if (autoScroll.checked) {
+
+  // focus
+  if (followTail.checked) {
     hrNode.scrollIntoView();
   }
 }
@@ -77,6 +62,7 @@ function generateSpan() {
   var spanNode = document.createElement("span");
   spanNode.className = "arrow";
   spanNode.textContent = "▼";
+  //spanNode.style = 'width:15px;height:15px;display:block;'
   spanNode.dataset.display = "true";
   spanNode.addEventListener("click", function (e) {
     if (this.dataset.display === "true") {
@@ -89,6 +75,7 @@ function generateSpan() {
       this.nextElementSibling.style = "";
     }
   });
+
   return spanNode;
 }
 
@@ -98,28 +85,7 @@ function generatePre(content) {
   return preNode;
 }
 
-// Expand all button
-toggleOpen.addEventListener("click", function () {
-  var arrows = logArea.querySelectorAll(".arrow");
-  arrows.forEach(function (arrow) {
-    arrow.textContent = "▼";
-    arrow.dataset.display = "true";
-    if (arrow.nextElementSibling) arrow.nextElementSibling.style = "";
-  });
-});
-
-// Collapse all button
-toggleClose.addEventListener("click", function () {
-  var arrows = logArea.querySelectorAll(".arrow");
-  arrows.forEach(function (arrow) {
-    arrow.textContent = "▶";
-    arrow.dataset.display = "false";
-    if (arrow.nextElementSibling)
-      arrow.nextElementSibling.style = "display:none";
-  });
-});
-
-// Clear button event
+/* =========================== event =========================== */
 document.querySelector("#clear").addEventListener("click", function (e) {
   logArea.innerHTML = "";
 });
