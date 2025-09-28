@@ -5,6 +5,39 @@ var url = document.querySelector("#url");
 var expression = document.querySelector("#expression");
 var followTail = document.querySelector("#checkbox-follow-tail");
 
+function urlMatches(requestUrl, filter) {
+  if (!filter) return true;
+  // RegExp: starts and ends with /
+  if (
+    filter.length > 2 &&
+    filter[0] === "/" &&
+    filter[filter.length - 1] === "/"
+  ) {
+    try {
+      var re = new RegExp(filter.slice(1, -1));
+      return re.test(requestUrl);
+    } catch (e) {
+      return false;
+    }
+  }
+  // Glob: contains * or ?
+  if (filter.includes("*") || filter.includes("?")) {
+    // Escape regex special chars except * and ?
+    var globToRegex = filter
+      .replace(/[.+^${}()|[\]\\]/g, "\\$&")
+      .replace(/\*/g, ".*")
+      .replace(/\?/g, ".");
+    try {
+      var re = new RegExp("^" + globToRegex + "$");
+      return re.test(requestUrl);
+    } catch (e) {
+      return false;
+    }
+  }
+  // Substring
+  return requestUrl.includes(filter);
+}
+
 chrome.devtools.network.onRequestFinished.addListener((request) => {
   if (!isJsonType(request)) {
     return;
@@ -12,7 +45,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
 
   var urlValue = url.value;
   if (urlValue) {
-    if (!request.request.url.includes(urlValue)) {
+    if (!urlMatches(request.request.url, urlValue)) {
       return;
     }
   }
