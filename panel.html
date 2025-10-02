@@ -1,99 +1,96 @@
 <html>
-  <head>
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        padding-top: 30px;
-      }
-      .form-area {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        padding: 1px;
-        background-color: #f5f6f7;
-        border-bottom: 1px solid rgb(192, 192, 192);
-      }
-      .input-text {
-        border: 0;
-        height: 22px;
-        margin: 2px;
-      }
-      .arrow {
-        cursor: pointer;
-      }
-      .div {
-        vertical-align: middle;
-        display: inline-block;
-        width: 1px;
-        height: 18px;
-        background-color: rgb(220, 220, 220);
-      }
-      .clear {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-        vertical-align: middle;
-        opacity: 0.6;
-      }
-      .clear:hover {
-        opacity: 0.8;
-      }
-      .checkbok {
-        vertical-align: middle;
-        margin-right: -1px;
-      }
-      .log-area {
-        margin: 3px;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="form-area" class="form-area">
-      <input id="url" class="input-text" placeholder=" url" />
-      <span class="div"></span>
-      <input
-        id="expression"
-        class="input-text"
-        style="width: 50%"
-        placeholder=" expression"
-      />
-      <span class="div"></span>
-      <img src="resources/img/delete.svg" id="clear" class="clear" />
-      <span class="div"></span>
-      <span>
-        <input
-          type="checkbox"
-          id="checkbox-autoscroll"
-          class="checkbok"
-          checked
-        />
-        <label for="checkbox-autoscroll">Auto scroll</label>
-      </span>
-        <span class="div"></span>
-      <span>
-        <input type="checkbox" id="checkbox-autoclear" class="checkbok" />
-        <label for="checkbox-autoclear">Auto clear</label>
-      </span>
-      <span class="div"></span>
-      <span>
-        <input type="checkbox" id="checkbox-onoff" class="checkbok" checked />
-        <label for="checkbox-onoff">ON/OFF</label>
-      </span>
-      <span class="div"></span>
-      <span>
-        <input type="checkbox" id="checkbox-pretty" class="checkbok" checked />
-        <label for="checkbox-pretty">pretty/minify</label>
-      </span>
-      <span class="div"></span>
-      <button id="toggle-open" class="input-text">open(▼)</button>
-      <span class="div"></span>
-      <button id="toggle-close" class="input-text">close(▶)</button>
-    </div>
-    <div id="log-area" class="log-area"></div>
-  </body>
-  <!-- https://unpkg.com/jsonpath@1.0.2/jsonpath.min.js -->
-  <script type="module" src="resources/js/jsonpath.min.js"></script>
-  <script type="module" src="panel.js"></script>
+    <head>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                padding-top: 30px;
+            }
+            .form-area {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                padding: 1px;
+                background-color: #F5F6F7;
+                border-bottom: 1px solid rgb(192, 192, 192);
+            }
+            .input-text {
+                border: 0;
+                height: 22px;
+                margin: 2px;
+            }
+            .arrow {
+                cursor: pointer;
+            }
+            .div {
+                vertical-align: middle;
+                display: inline-block;
+                width: 1px;
+                height: 18px;                
+                background-color: rgb(220, 220, 220)
+            }
+            .clear {
+                width: 18px;
+                height: 18px;
+                cursor: pointer;
+                vertical-align: middle;
+                opacity: 0.6;
+            }
+            .clear:hover {
+                opacity: 0.8;
+            }
+            .checkbok {
+                vertical-align: middle;
+                margin-right: -1px;
+            }
+            .log-area {
+                margin: 3px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="form-area" class="form-area">
+            <input id="url" class="input-text" placeholder=" url"/>
+            <span class="div"></span>
+            <input id="expression" class="input-text" style="width:50%" placeholder=" expression"/>
+            <span class="div"></span>
+            <img src="resources/img/delete.svg" id="clear" class="clear"/>
+            <span class="div"></span>
+            <span>
+                <!-- <input type="checkbox" id="checkbox-follow-tail" class="checkbok" checked/>
+                <label>Follow tail</label> -->
+                 <input
+                  type="checkbox"
+                  id="checkbox-autoscroll"
+                  class="checkbok"
+                  checked
+                />
+                <label for="checkbox-autoscroll">Auto scroll</label>
+            </span>
+            <span class="div"></span>
+            <span>
+              <input type="checkbox" id="checkbox-autoclear" class="checkbok" />
+              <label for="checkbox-autoclear">Auto clear</label>
+            </span>
+            <span class="div"></span>
+            <span>
+              <input type="checkbox" id="checkbox-onoff" class="checkbok" checked />
+              <label for="checkbox-onoff">ON/OFF</label>
+            </span>
+            <span class="div"></span>
+            <span>
+              <input type="checkbox" id="checkbox-pretty" class="checkbok" checked />
+              <label for="checkbox-pretty">pretty/minify</label>
+            </span>
+            <span class="div"></span>
+            <button id="toggle-open" class="input-text">open(▼)</button>
+            <span class="div"></span>
+            <button id="toggle-close" class="input-text">close(▶)</button>
+        </div>
+        <div id="log-area" class="log-area"></div>
+    </body>
+    <!-- https://unpkg.com/jsonpath@1.0.2/jsonpath.min.js -->
+    <script type="module" src="resources/js/jsonpath.min.js"></script>
+    <script type="module" src="panel.js"></script>
 </html>

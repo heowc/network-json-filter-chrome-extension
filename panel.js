@@ -1,8 +1,9 @@
 var DEFAULT_JSON = "{}";
 
-var logArea = document.querySelector("#log-area");
-var url = document.querySelector("#url");
-var expression = document.querySelector("#expression");
+var logArea = document.querySelector('#log-area');
+var url = document.querySelector('#url');
+var expression = document.querySelector('#expression');
+// var followTail = document.querySelector('#checkbox-follow-tail')
 var autoScroll = document.querySelector("#checkbox-autoscroll");
 var autoClear = document.querySelector("#checkbox-autoclear");
 var onOff = document.querySelector("#checkbox-onoff");
@@ -10,7 +11,7 @@ var pretty = document.querySelector("#checkbox-pretty");
 var toggleOpen = document.querySelector("#toggle-open");
 var toggleClose = document.querySelector("#toggle-close");
 
-chrome.devtools.network.onRequestFinished.addListener((request) => {
+chrome.devtools.network.onRequestFinished.addListener(request => {
   if (!isJsonType(request)) {
     return;
   }
@@ -28,14 +29,14 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   request.getContent(function (content) {
     var expressionValue = expression.value;
     if (autoClear.checked) {
-      logArea.innerHTML = "";
+      logArea.innerHTML = '';
     }
     if (!expressionValue) {
       appendToPanel(content);
       return;
     }
 
-    var result = jsonpath.query(JSON.parse(content), expressionValue);
+    var result = jsonpath.query(JSON.parse(content), expressionValue)
     if (result.length > 0) {
       appendToPanel(JSON.stringify(result[0]));
     } else {
@@ -45,7 +46,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
 });
 
 function isJsonType(request) {
-  return request.response.content.mimeType === "application/json";
+  return request.response.content.mimeType === 'application/json';
 }
 
 function appendToPanel(value) {
@@ -63,38 +64,38 @@ function appendToPanel(value) {
   }
 
   // pre(json content)
-  var preNode = generatePre(JSON.stringify(JSON.parse(value), undefined, 2));
+  var preNode = generatePre(jsonStr);
   // p
   var pNode = document.createElement("p");
   pNode.appendChild(spanNode);
   pNode.appendChild(preNode);
   // hr
   var hrNode = document.createElement("hr");
-
+  
   logArea.appendChild(pNode);
   logArea.appendChild(hrNode);
-
+  
   // focus
-  if (autoScroll.checked) {
+  if (followTail.checked) {
     hrNode.scrollIntoView();
   }
 }
 
 function generateSpan() {
   var spanNode = document.createElement("span");
-  spanNode.className = "arrow";
-  spanNode.textContent = "▼";
+  spanNode.className = 'arrow'
+  spanNode.textContent = '▼';
   //spanNode.style = 'width:15px;height:15px;display:block;'
-  spanNode.dataset.display = "true";
-  spanNode.addEventListener("click", function (e) {
-    if (this.dataset.display === "true") {
-      this.textContent = "▶";
-      this.dataset.display = "false";
-      this.nextElementSibling.style = "display:none";
+  spanNode.dataset.display = 'true';
+  spanNode.addEventListener('click', function(e) {
+    if (this.dataset.display === 'true') {
+      this.textContent = '▶';
+      this.dataset.display = 'false';
+      this.nextElementSibling.style = 'display:none';
     } else {
-      this.textContent = "▼";
-      this.dataset.display = "true";
-      this.nextElementSibling.style = "";
+      this.textContent = '▼';
+      this.dataset.display = 'true';
+      this.nextElementSibling.style = '';
     }
   });
 
@@ -129,6 +130,6 @@ toggleClose.addEventListener("click", function () {
 });
 
 /* =========================== event =========================== */
-document.querySelector("#clear").addEventListener("click", function (e) {
-  logArea.innerHTML = "";
+document.querySelector('#clear').addEventListener('click', function(e) {
+  logArea.innerHTML = '';
 });
