@@ -1,9 +1,9 @@
 var DEFAULT_JSON = "{}";
 
-var logArea = document.querySelector("#log-area");
-var url = document.querySelector("#url");
-var expression = document.querySelector("#expression");
-var followTail = document.querySelector("#checkbox-follow-tail");
+var logArea = document.querySelector('#log-area');
+var url = document.querySelector('#url');
+var expression = document.querySelector('#expression');
+var followTail = document.querySelector('#checkbox-follow-tail')
 
 function urlMatches(requestUrl, filter) {
   if (!filter) return true;
@@ -38,7 +38,7 @@ function urlMatches(requestUrl, filter) {
   return requestUrl.includes(filter);
 }
 
-chrome.devtools.network.onRequestFinished.addListener((request) => {
+chrome.devtools.network.onRequestFinished.addListener(request => {
   if (!isJsonType(request)) {
     return;
   }
@@ -57,7 +57,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
       return;
     }
 
-    var result = jsonpath.query(JSON.parse(content), expressionValue);
+    var result = jsonpath.query(JSON.parse(content), expressionValue)
     if (result.length > 0) {
       appendToPanel(JSON.stringify(result[0]));
     } else {
@@ -67,7 +67,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
 });
 
 function isJsonType(request) {
-  return request.response.content.mimeType === "application/json";
+  return request.response.content.mimeType === 'application/json';
 }
 
 function appendToPanel(value) {
@@ -81,10 +81,10 @@ function appendToPanel(value) {
   pNode.appendChild(preNode);
   // hr
   var hrNode = document.createElement("hr");
-
+  
   logArea.appendChild(pNode);
   logArea.appendChild(hrNode);
-
+  
   // focus
   if (followTail.checked) {
     hrNode.scrollIntoView();
@@ -93,19 +93,19 @@ function appendToPanel(value) {
 
 function generateSpan() {
   var spanNode = document.createElement("span");
-  spanNode.className = "arrow";
-  spanNode.textContent = "▼";
+  spanNode.className = 'arrow'
+  spanNode.textContent = '▼';
   //spanNode.style = 'width:15px;height:15px;display:block;'
-  spanNode.dataset.display = "true";
-  spanNode.addEventListener("click", function (e) {
-    if (this.dataset.display === "true") {
-      this.textContent = "▶";
-      this.dataset.display = "false";
-      this.nextElementSibling.style = "display:none";
+  spanNode.dataset.display = 'true';
+  spanNode.addEventListener('click', function(e) {
+    if (this.dataset.display === 'true') {
+      this.textContent = '▶';
+      this.dataset.display = 'false';
+      this.nextElementSibling.style = 'display:none';
     } else {
-      this.textContent = "▼";
-      this.dataset.display = "true";
-      this.nextElementSibling.style = "";
+      this.textContent = '▼';
+      this.dataset.display = 'true';
+      this.nextElementSibling.style = '';
     }
   });
 
@@ -119,6 +119,6 @@ function generatePre(content) {
 }
 
 /* =========================== event =========================== */
-document.querySelector("#clear").addEventListener("click", function (e) {
-  logArea.innerHTML = "";
+document.querySelector('#clear').addEventListener('click', function(e) {
+  logArea.innerHTML = '';
 });
