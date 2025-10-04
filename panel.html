@@ -50,6 +50,19 @@
             #toggle-open,#toggle-close{
               cursor: pointer;
             }
+
+            .collapsed + pre {
+                display: none;
+            }
+
+            .expanded + pre {
+                display: block;
+            }
+
+            /* optional smooth transitions */
+            pre {
+                transition: all 0.25s ease;
+            }
         </style>
     </head>
     <body>
@@ -61,8 +74,6 @@
             <img src="resources/img/delete.svg" id="clear" class="clear"/>
             <span class="div"></span>
             <span>
-                <!-- <input type="checkbox" id="checkbox-follow-tail" class="checkbok" checked/>
-                <label>Follow tail</label> -->
                  <input
                   type="checkbox"
                   id="checkbox-autoscroll"
