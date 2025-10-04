@@ -5,22 +5,42 @@ var url = document.querySelector('#url');
 var expression = document.querySelector('#expression');
 var followTail = document.querySelector('#checkbox-follow-tail')
 
-function urlMatches(requestUrl, filter) {
-  if (!filter) return true;
-  // RegExp: starts and ends with /
-  if (
-    filter.length > 2 &&
-    filter[0] === "/" &&
-    filter[filter.length - 1] === "/"
-  ) {
+
+
+
+// helper: checks if the filter looks like a regex pattern (starts and ends with '/')
+function matchRegExp(filter){
+   return filter.length > 2 && filter[0] === "/" && filter[filter.length - 1] === "/";
+}
+function matchesUrl(requestUrl, filter) {
+  if (!filter) return true; // no filter = match all
+
+  // --- case 1: regular expression ---
+  // 1️⃣ Regular Expression (RegExp) — when filter starts and ends with "/"
+  //     example:
+  //       filter = "/api\\/v[0-9]+/"
+  //       matchesUrl("https://example.com/api/v2/users", filter) → true
+
+  if (matchRegExp(filter)) {
     try {
-      var re = new RegExp(filter.slice(1, -1));
+      var re = new RegExp(filter.slice(1, -1)); // remove surrounding slashes
       return re.test(requestUrl);
     } catch (e) {
-      return false;
+      return false; // invalid regex
     }
   }
-  // Glob: contains * or ?
+
+
+  // --- case 2: glob pattern (contains * or ?) ---
+  // 2️⃣ Glob Pattern — when filter contains "*" or "?"
+  //     "*" → matches any number of characters
+  //     "?" → matches exactly one character
+  //     examples:
+  //       filter = "*.json"
+  //       matchesUrl("https://example.com/data.json", filter) → true
+  //
+  //       filter = "*/user?.*"
+  //       matchesUrl("https://example.com/users.txt", filter) → false
   if (filter.includes("*") || filter.includes("?")) {
     // Escape regex special chars except * and ?
     var globToRegex = filter
@@ -34,7 +54,12 @@ function urlMatches(requestUrl, filter) {
       return false;
     }
   }
-  // Substring
+  
+  // --- case 3: substring match ---
+  // 3️⃣ Simple Substring — fallback if filter is a plain string
+  //     example:
+  //       filter = "api/v1"
+  //       matchesUrl("https://example.com/api/v1/user", filter) → true
   return requestUrl.includes(filter);
 }
 
@@ -43,9 +68,9 @@ chrome.devtools.network.onRequestFinished.addListener(request => {
     return;
   }
 
-  var urlValue = url.value;
-  if (urlValue) {
-    if (!urlMatches(request.request.url, urlValue)) {
+  var filterValue = url.value;
+  if (filterValue) {
+    if (!matchesUrl(request.request.url, filterValue)) {
       return;
     }
   }
