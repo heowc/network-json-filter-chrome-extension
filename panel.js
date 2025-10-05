@@ -11,6 +11,7 @@ var followTail = document.querySelector('#checkbox-follow-tail')
 function matchRegExp(filter){
    return filter.length > 2 && filter[0] === "/" && filter[filter.length - 1] === "/";
 }
+
 function matchesUrl(requestUrl, filter) {
   if (!filter) return true; // no filter = match all
 
