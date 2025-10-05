@@ -10,18 +10,72 @@ var pretty = document.querySelector("#checkbox-pretty");
 var toggleOpen = document.querySelector("#toggle-open");
 var toggleClose = document.querySelector("#toggle-close");
 
+
+
+// helper: checks if the filter looks like a regex pattern (starts and ends with '/')
+function matchRegExp(filter){
+   return filter.length > 2 && filter[0] === "/" && filter[filter.length - 1] === "/";
+}
+
+function matchesUrl(requestUrl, filter) {
+  if (!filter) return true; // no filter = match all
+
+  // --- case 1: regular expression ---
+  // 1️⃣ Regular Expression (RegExp) — when filter starts and ends with "/"
+  //     example:
+  //       filter = "/api\\/v[0-9]+/"
+  //       matchesUrl("https://example.com/api/v2/users", filter) → true
+
+  if (matchRegExp(filter)) {
+    try {
+      var re = new RegExp(filter.slice(1, -1)); // remove surrounding slashes
+      return re.test(requestUrl);
+    } catch (e) {
+      return false; // invalid regex
+    }
+  }
+
+
+  // --- case 2: glob pattern (contains * or ?) ---
+  // 2️⃣ Glob Pattern — when filter contains "*" or "?"
+  //     "*" → matches any number of characters
+  //     "?" → matches exactly one character
+  //     examples:
+  //       filter = "*.json"
+  //       matchesUrl("https://example.com/data.json", filter) → true
+  //
+  //       filter = "*/user?.*"
+  //       matchesUrl("https://example.com/users.txt", filter) → false
+  if (filter.includes("*") || filter.includes("?")) {
+    // Escape regex special chars except * and ?
+    var globToRegex = filter
+      .replace(/[.+^${}()|[\]\\]/g, "\\$&")
+      .replace(/\*/g, ".*")
+      .replace(/\?/g, ".");
+    try {
+      var re = new RegExp("^" + globToRegex + "$");
+      return re.test(requestUrl);
+    } catch (e) {
+      return false;
+    }
+  }
+  
+  // --- case 3: substring match ---
+  // 3️⃣ Simple Substring — fallback if filter is a plain string
+  //     example:
+  //       filter = "api/v1"
+  //       matchesUrl("https://example.com/api/v1/user", filter) → true
+  return requestUrl.includes(filter);
+}
+
 chrome.devtools.network.onRequestFinished.addListener(request => {
    if (!onOff.checked) {
     return;
   }
 
-  if (!isJsonType(request)) {
-    return;
-  }
- 
-  var urlValue = url.value;
-  if (urlValue) {
-    if (!request.request.url.includes(urlValue)) {
+  var filterValue = url.value;
+  if (filterValue) {
+    if (!matchesUrl(request.request.url, filterValue)) {
       return;
     }
   }
