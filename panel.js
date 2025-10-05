@@ -7,7 +7,6 @@ var followTail = document.querySelector('#checkbox-follow-tail')
 
 
 
-
 // helper: checks if the filter looks like a regex pattern (starts and ends with '/')
 function matchRegExp(filter){
    return filter.length > 2 && filter[0] === "/" && filter[filter.length - 1] === "/";
