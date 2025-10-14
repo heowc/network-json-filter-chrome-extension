@@ -12,6 +12,20 @@ var toggleClose = document.querySelector("#toggle-close");
 
 
 
+
+// Pre-populating filter fields from localStorage
+url.value = localStorage.getItem("lastUrl") || "";
+expression.value = localStorage.getItem("lastExpression") || "";
+
+// Saving filter fields to localStorage on change
+url.addEventListener("input", () => {
+  localStorage.setItem("lastUrl", url.value);
+});
+expression.addEventListener("input", () => {
+  localStorage.setItem("lastExpression", expression.value);
+});
+
+
 // helper: checks if the filter looks like a regex pattern (starts and ends with '/')
 function matchRegExp(filter){
    return filter.length > 2 && filter[0] === "/" && filter[filter.length - 1] === "/";
