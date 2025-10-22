@@ -12,6 +12,20 @@ var toggleClose = document.querySelector("#toggle-close");
 
 
 
+
+// Pre-populating filter fields from localStorage
+url.value = localStorage.getItem("lastUrl") || "";
+expression.value = localStorage.getItem("lastExpression") || "";
+
+// Saving filter fields to localStorage on change
+url.addEventListener("input", () => {
+  localStorage.setItem("lastUrl", url.value);
+});
+expression.addEventListener("input", () => {
+  localStorage.setItem("lastExpression", expression.value);
+});
+
+
 // helper: checks if the filter looks like a regex pattern (starts and ends with '/')
 function matchRegExp(filter){
    return filter.length > 2 && filter[0] === "/" && filter[filter.length - 1] === "/";
@@ -90,7 +104,7 @@ chrome.devtools.network.onRequestFinished.addListener(request => {
       return;
     }
 
-    var result = jsonpath.query(JSON.parse(content), expressionValue)
+    var result = jsonpath.query(JSON.parse(content), expressionValue);
     if (result.length > 0) {
       appendToPanel(JSON.stringify(result[0]));
     } else {
@@ -100,7 +114,7 @@ chrome.devtools.network.onRequestFinished.addListener(request => {
 });
 
 function isJsonType(request) {
-  return request.response.content.mimeType === 'application/json';
+  return request.response.content.mimeType === "application/json";
 }
 
 function appendToPanel(value) {
@@ -125,10 +139,10 @@ function appendToPanel(value) {
   pNode.appendChild(preNode);
   // hr
   var hrNode = document.createElement("hr");
-  
+
   logArea.appendChild(pNode);
   logArea.appendChild(hrNode);
-  
+
   // focus
   if (autoScroll.checked) {
     hrNode.scrollIntoView();
@@ -201,6 +215,6 @@ toggleClose.addEventListener("click", () => {
 
 
 /* =========================== event =========================== */
-document.querySelector('#clear').addEventListener('click', function(e) {
-  logArea.innerHTML = '';
+document.querySelector("#clear").addEventListener("click", function (e) {
+  logArea.innerHTML = "";
 });
